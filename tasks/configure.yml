@@ -80,6 +80,10 @@
   lineinfile: dest=/etc/rc.local regexp='/usr/local/bin/disable_thp.sh' line='if test -f '/usr/local/bin/disable_thp.sh'; /usr/local/bin/disable_thp.sh; fi'
   when: ansible_os_family == 'Debian' and mongodb_disable_thp
 
+- name: Adjust ulimits
+  copy: src=ulimit_settings.sh dest=/etc/default/mongod
+  when: ansible_os_family == 'Debian' and mongodb_adjust_ulimits
+
 - name: get pid of mongod
   command: pidof mongod
   register: mongod_new_pid
